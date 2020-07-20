@@ -27,7 +27,8 @@ def H_gate(blochvector):
     return np.array([blochvector[2], -blochvector[1], blochvector[0]])
 
 def S_gate(blochvector):
-    return operator_sum(blochvector, [np.matrix([[1,0],[0,np.exp(1j*np.pi/2)]])])
+    #return operator_sum(blochvector, [np.matrix([[1,0],[0,np.exp(1j*np.pi/2)]])])
+    return np.array([-blochvector[1], blochvector[0], blochvector[2]])
     
 def T_gate(blochvector):
     return operator_sum(blochvector, [np.matrix([[1,0],[0,np.exp(1j*np.pi/4)]])])
@@ -36,10 +37,11 @@ def T_gate(blochvector):
     
 def amplitude_damping(blochvector, Gamma, t):
     p=1
-    E0 = np.sqrt(p)*np.matrix([ [1,     0          ],
+    E0 = np.sqrt(p)*np.matrix([ [1,         0          ],
                                 [0,np.exp(-0.5*Gamma*t)]])
+    
     E1 = np.sqrt(p)*np.matrix([ [0,np.sqrt(1-np.exp(-Gamma*t))],
-                                [0,     0        ]])
+                                [0,             0             ]])
     # for general amplitude damping
     #E2 = np.sqrt(1-p)*np.matrix([[np.sqrt(1-gamma),0],
     #                             [      0         ,1]])
@@ -53,7 +55,23 @@ def phase_damping(blochvector, Gamma, dw, t):
     E1 = np.matrix([ [0,               0              ],
                      [0, np.sqrt(1-np.exp(-2*Gamma*t))]])
     return operator_sum(blochvector, [E0, E1])
-    
+
+def bit_flip(blochvector, p):
+    return np.array([blochvector[0], (2*p-1)*blochvector[1], (2*p-1)*blochvector[2]])
+
+def phase_flip(blochvector, p):
+    return np.array([(2*p-1)*blochvector[0], (2*p-1)*blochvector[1], blochvector[2]])
+
+def bit_phase_flip(blochvector, p):
+    return np.array([(2*p-1)*blochvector[0], blochvector[1], (2*p-1)*blochvector[2]])
+
+def depolarization(blochvector, p):
+    """
+    input: 
+    blochvector
+    p: probability for depolarization
+    """
+    return np.array([(1-4/3*p)*blochvector[0], (1-4/3*p)*blochvector[1], (1-4/3*p)*blochvector[2]])
 
 def operator_sum(blochvector, list):
     x = 0

@@ -1,12 +1,21 @@
 import numpy as np
 import cmath
 from constants import *
+from helper_functions_2Qubits import *
 
 class TwoQubits:
     """
     input:
     
     r = [rx, ry, rz]: Blochvector entries: rho = 0.5*(I + r*sigma_vector)
+    
+    uses:
+                  a00 ... a03
+    coef_matrix =  .  .    .
+                   .     . .
+                  a30 ... a33
+              
+    where rho = a00*(I⊗I) + a01*(I⊗sigmaX) + ... + a33*(sigmaZ⊗sigmaZ)
     """
     def __init__(self, vec1, vec2):
         scale1 = 1.
@@ -22,18 +31,17 @@ class TwoQubits:
         if type(vec2)==list:
             vec = np.array(vec2)
         
-        matrix1 = 0.5*(I + scale1*vec1[0]*sigma1 + scale1*vec1[1]*sigma2 + scale1*vec1[2]*sigma3)
-        matrix2 = 0.5*(I + scale2*vec2[0]*sigma1 + scale2*vec2[1]*sigma2 + scale2*vec2[2]*sigma3)
+        #matrix1 = 0.5*(I + scale1*vec1[0]*sigma1 + scale1*vec1[1]*sigma2 + scale1*vec1[2]*sigma3)
+        #matrix2 = 0.5*(I + scale2*vec2[0]*sigma1 + scale2*vec2[1]*sigma2 + scale2*vec2[2]*sigma3)
     
-        self.matrix = np.matrix([[matrix1[0,0]*matrix2[0,0], matrix1[0,0]*matrix2[0,1],                                                matrix1[0,1]*matrix2[0,0], matrix1[0,1]*matrix2[0,1]],
+        self.coef_matrix = np.matrix([[0.25,              0,               0,               0],
+                                      [   0,vec1[0]*vec2[0],               0,               0],
+                                      [   0,              0, vec1[1]*vec2[1],               0],
+                                      [   0,              0,               0, vec1[2]*vec2[2]]])
+        
     
-                                 [matrix1[0,0]*matrix2[1,0], matrix1[0,0]*matrix2[1,1],
-                                  matrix1[0,1]*matrix2[1,0], matrix1[0,1]*matrix2[1,1]],
-                              
-                                 [matrix1[1,0]*matrix2[0,0], matrix1[1,0]*matrix2[0,1],
-                                 matrix1[1,1]*matrix2[0,0], matrix1[1,1]*matrix2[0,1]],
-                              
-                                 [matrix1[1,0]*matrix2[1,0], matrix1[1,0]*matrix2[1,1],
-                                  matrix1[1,1]*matrix2[1,0], matrix1[1,1]*matrix2[1,1]]])
     def get_matrix(self):
-        return self.matrix
+        return get_rho_from_Pauli_basis(self.coef_matrix)
+    
+    def set_Pauli_basis_matrix(self, matrix):
+        self.coef_matrix = matrix
