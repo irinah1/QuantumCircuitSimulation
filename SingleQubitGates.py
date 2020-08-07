@@ -49,21 +49,21 @@ def amplitude_damping(blochvector, Gamma, t):
     #                             [np.sqrt(gamma),0]])
     return operator_sum(blochvector, [E0, E1])
     
-def phase_damping(blochvector, Gamma, dw, t):
+def phase_damping(blochvector, Gamma, t):
     E0 = np.matrix([ [1,                 0               ],
-                     [0,np.exp(-Gamma*t)*np.exp(-1j*dw*t)]])
+                     [0,np.exp(-Gamma*t)]])
     E1 = np.matrix([ [0,               0              ],
                      [0, np.sqrt(1-np.exp(-2*Gamma*t))]])
     return operator_sum(blochvector, [E0, E1])
 
 def bit_flip(blochvector, p):
-    return np.array([blochvector[0], (2*p-1)*blochvector[1], (2*p-1)*blochvector[2]])
+    return np.array([blochvector[0], (1-2*p)*blochvector[1], (1-2*p)*blochvector[2]])
 
 def phase_flip(blochvector, p):
-    return np.array([(2*p-1)*blochvector[0], (2*p-1)*blochvector[1], blochvector[2]])
+    return np.array([(1-2*p)*blochvector[0], (1-2*p)*blochvector[1], blochvector[2]])
 
 def bit_phase_flip(blochvector, p):
-    return np.array([(2*p-1)*blochvector[0], blochvector[1], (2*p-1)*blochvector[2]])
+    return np.array([(1-2*p)*blochvector[0], blochvector[1], (1-2*p)*blochvector[2]])
 
 def depolarization(blochvector, p):
     """

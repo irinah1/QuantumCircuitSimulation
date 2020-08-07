@@ -101,6 +101,71 @@ def SWAPgate(coef_matrix):
     rho = operator_sum(rho, [np.matrix([[1,0,0,0],[0,0,1,0],[0,1,0,0],[0,0,0,1]])])
     return get_Pauli_basis_from_rho(rho)
 
+def individual_amplitude_damping(coef_matrix, Gamma, t):
+    # performs amplitude damping for each qubit individually
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E10 = (1/np.sqrt(2))*tensorProdtoMatrix2D(np.matrix([[0,np.sqrt(1-np.exp(-Gamma*t))],[0,0]]), I)
+    E01 = (1/np.sqrt(2))*tensorProdtoMatrix2D(I, np.matrix([[0,np.sqrt(1-np.exp(-Gamma*t))],[0,0]]))
+    E00 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E01.H)*E01-(E10.H)*E10)
+    #print("E01:\n",E01*rho*E01.H, "\n")
+    #print("E10:\n",E10*rho*E10.H, "\n")
+    #print("E00:\n",E00*rho*E00.H, "\n")
+    rho = operator_sum(rho, [E10, E01, E00])
+    return get_Pauli_basis_from_rho(rho)
+
+def fully_correlated_amplitude_damping(coef_matrix, Gamma, t):
+    # performs correlated amplitude damping
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E1 = tensorProdtoMatrix2D(np.matrix([[0,np.sqrt(1-np.exp(-Gamma*t))],[0,0]]), np.matrix([[0,np.sqrt(1-np.exp(-Gamma*t))],[0,0]]))
+    E0 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E1.H)*E1)
+
+    rho = operator_sum(rho, [E1, E0])
+    return get_Pauli_basis_from_rho(rho)
+
+def individual_phase_damping(coef_matrix, Gamma, t):
+    # performs phase damping for each qubit individually
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E10 = (1/np.sqrt(2))*tensorProdtoMatrix2D(np.matrix([[0,0],[0,np.sqrt(1-np.exp(-2*Gamma*t))]]), I)
+    E01 = (1/np.sqrt(2))*tensorProdtoMatrix2D(I, np.matrix([ [0,0],[0,np.sqrt(1-np.exp(-2*Gamma*t))]]))
+    E00 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E01.H)*E01-(E10.H)*E10)
+    
+    rho = operator_sum(rho, [E10, E01, E00])
+    return get_Pauli_basis_from_rho(rho)
+
+def fully_correlated_phase_damping(coef_matrix, Gamma, t):
+    # performs correlated phase damping
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E1 = tensorProdtoMatrix2D(np.matrix([[0,0],[0,np.sqrt(1-np.exp(-2*Gamma*t))]]), np.matrix([[0,0],[0,np.sqrt(1-np.exp(-2*Gamma*t))]]))
+    E0 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E1.H)*E1)
+    
+    rho = operator_sum(rho, [E1, E0])
+    return get_Pauli_basis_from_rho(rho)
+
+def individual_phase_flip(coef_matrix, p):
+    # performs phase flip for each qubit individually
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E10 = (1/np.sqrt(2))*tensorProdtoMatrix2D(np.sqrt(p)*np.matrix([[1,0],[0,-1]]), I)
+    E01 = (1/np.sqrt(2))*tensorProdtoMatrix2D(I, np.sqrt(p)*np.matrix([[1,0],[0,-1]]))
+    E00 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E01.H)*E01-(E10.H)*E10)
+    
+    rho = operator_sum(rho, [E10, E01, E00])
+    return get_Pauli_basis_from_rho(rho)
+
+def fully_correlated_phase_flip(coef_matrix, p):
+    # performs correlated phase flip
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E1 = (1/np.sqrt(2))*tensorProdtoMatrix2D(np.sqrt(p)*np.matrix([[1,0],[0,-1]]), np.sqrt(p)*np.matrix([[1,0],[0,-1]]))
+    E0 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E1.H)*E1)
+    
+    rho = operator_sum(rho, [E1, E0])
+    return get_Pauli_basis_from_rho(rho)
+
 def operator_sum(rho, list):
     res = 0
     for mat in list:
