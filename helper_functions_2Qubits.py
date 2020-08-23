@@ -10,7 +10,7 @@ def get_rho_from_Pauli_basis(coef_matrix):
     output:
     rho
     """
-    res_mat = np.matrix([[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j],[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j], [0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j],[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j]])
+    res_mat = np.zeros((4,4), dtype=complex)
     i = 0
     for mat1 in [I, sigma1, sigma2, sigma3]:
         j = 0
@@ -29,7 +29,7 @@ def get_Pauli_basis_from_rho(res):
     Pauli basis coefficient matrix
     """
     # bring into pauli basis (16 real coefficients)
-    pauli_basis_mat = np.matrix([[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j],[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j],[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j],[0.+0.*1j,0.+0.*1j,0.+0.*1j,0.+0.*1j]])
+    pauli_basis_mat =np.zeros((4,4), dtype=complex)
 
     Sigma = [I, sigma1, sigma2, sigma3]
 

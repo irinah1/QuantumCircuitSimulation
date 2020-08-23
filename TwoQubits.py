@@ -34,10 +34,10 @@ class TwoQubits:
         #matrix1 = 0.5*(I + scale1*vec1[0]*sigma1 + scale1*vec1[1]*sigma2 + scale1*vec1[2]*sigma3)
         #matrix2 = 0.5*(I + scale2*vec2[0]*sigma1 + scale2*vec2[1]*sigma2 + scale2*vec2[2]*sigma3)
     
-        self.coef_matrix = np.matrix([[0.25,              0,               0,               0],
-                                      [   0,vec1[0]*vec2[0],               0,               0],
-                                      [   0,              0, vec1[1]*vec2[1],               0],
-                                      [   0,              0,               0, vec1[2]*vec2[2]]])
+        self.coef_matrix = 0.25*np.matrix([[   1,        vec2[0],         vec2[1],          vec2[2]],
+                                        [vec1[0],vec1[0]*vec2[0], vec1[0]*vec2[1],  vec1[0]*vec2[2]],
+                                        [vec1[1],vec1[1]*vec2[0], vec1[1]*vec2[1],  vec1[1]*vec2[2]],
+                                        [vec1[2],vec1[2]*vec2[0], vec1[2]*vec2[1],  vec1[2]*vec2[2]]])
         
     
     def get_matrix(self):
