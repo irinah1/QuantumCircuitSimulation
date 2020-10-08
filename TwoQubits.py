@@ -21,10 +21,10 @@ class TwoQubits:
         scale1 = 1.
         scale2 = 1.
         if (vec1[0]**2+vec1[1]**2+vec1[2]**2 > 1):
-            print("Blochvector r1 has to fullfill rx^2 + ry^2 + rz^2 <= 1.")
+            #print("Blochvector r1 has to fullfill rx^2 + ry^2 + rz^2 <= 1.")
             scale1 = 1/np.sqrt(vec1[0]**2+vec1[1]**2+vec1[2]**2)
         if (vec2[0]**2+vec2[1]**2+vec2[2]**2 > 1):
-            print("Blochvector r2 has to fullfill rx^2 + ry^2 + rz^2 <= 1.")
+            #print("Blochvector r2 has to fullfill rx^2 + ry^2 + rz^2 <= 1.")
             scale2 = 1/np.sqrt(vec2[0]**2+vec2[1]**2+vec2[2]**2)
         if type(vec1)==list:
             vec = np.array(vec1)

@@ -100,6 +100,11 @@ def SWAPgate(coef_matrix):
     rho = get_rho_from_Pauli_basis(coef_matrix)
     rho = operator_sum(rho, [np.matrix([[1,0,0,0],[0,0,1,0],[0,1,0,0],[0,0,0,1]])])
     return get_Pauli_basis_from_rho(rho)
+    
+def R2_gate(coef_matrix):
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    rho = operator_sum(rho, [np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1j]])])
+    return get_Pauli_basis_from_rho(rho)
 
 def individual_amplitude_damping(coef_matrix, Gamma, t):
     # performs amplitude damping for each qubit individually
@@ -161,6 +166,48 @@ def fully_correlated_phase_flip(coef_matrix, p):
     rho = get_rho_from_Pauli_basis(coef_matrix)
     
     E1 = (1/np.sqrt(2))*np.kron(np.sqrt(p)*np.matrix([[1,0],[0,-1]]), np.sqrt(p)*np.matrix([[1,0],[0,-1]]))
+    E0 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E1.H)*E1)
+    
+    rho = operator_sum(rho, [E1, E0])
+    return get_Pauli_basis_from_rho(rho)
+    
+def individual_bit_flip(coef_matrix, p):
+    # performs phase flip for each qubit individually
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E10 = (1/np.sqrt(2))*np.kron(np.sqrt(p)*sigma1, I)
+    E01 = (1/np.sqrt(2))*np.kron(I, np.sqrt(p)*sigma1)
+    E00 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E01.H)*E01-(E10.H)*E10)
+    
+    rho = operator_sum(rho, [E10, E01, E00])
+    return get_Pauli_basis_from_rho(rho)
+
+def fully_correlated_bit_flip(coef_matrix, p):
+    # performs correlated phase flip
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E1 = (1/np.sqrt(2))*np.kron(np.sqrt(p)*sigma1, np.sqrt(p)*sigma1)
+    E0 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E1.H)*E1)
+    
+    rho = operator_sum(rho, [E1, E0])
+    return get_Pauli_basis_from_rho(rho)
+    
+def individual_bit_phase_flip(coef_matrix, p):
+    # performs phase flip for each qubit individually
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E10 = (1/np.sqrt(2))*np.kron(np.sqrt(p)*sigma2, I)
+    E01 = (1/np.sqrt(2))*np.kron(I, np.sqrt(p)*sigma2)
+    E00 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E01.H)*E01-(E10.H)*E10)
+    
+    rho = operator_sum(rho, [E10, E01, E00])
+    return get_Pauli_basis_from_rho(rho)
+
+def fully_correlated_bit_phase_flip(coef_matrix, p):
+    # performs correlated phase flip
+    rho = get_rho_from_Pauli_basis(coef_matrix)
+    
+    E1 = (1/np.sqrt(2))*np.kron(np.sqrt(p)*sigma2, np.sqrt(p)*sigma2)
     E0 = np.sqrt(np.matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])-(E1.H)*E1)
     
     rho = operator_sum(rho, [E1, E0])

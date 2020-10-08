@@ -100,8 +100,8 @@ def single_Weyl_channel(mat, n, m, p):
 
 def amplitude_damping(mat, gammalist):
     """
-    input: gammalist = [gamma_01, gamma_02, ..., gamma_0d-1,
-                        gamma_12,..., gamma_1d-1,
+    input: gammalist = [gamma_01, gamma_02, ..., gamma_0(d-1),
+                        gamma_12,..., gamma_1(d-1),
                         ...,
                         gamma_(d-2)(d-1)]
     """
